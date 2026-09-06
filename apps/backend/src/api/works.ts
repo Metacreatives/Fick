@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 
 import { works } from "../data/works.ts";
+import { findPublicwWorkById } from "../services/works.ts";
 
 type WorkParams = {
     id: string;
@@ -8,7 +9,7 @@ type WorkParams = {
 
 export function registerWorkRoutes(app: FastifyInstance) {
     app.get<{ Params: WorkParams }>("/api/works/:id", async (request, reply) => {
-        const work = works.get(request.params.id);
+        const work = findPublicwWorkById(request.params.id);
 
         if (!work) {
             return reply.code(404).send({
