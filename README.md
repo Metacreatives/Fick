@@ -2,6 +2,9 @@
 
 A new way to explore indie-made creative works.
 
+> [!WARNING]
+> This project is currently in development! Rest assured, advertised features works on a legacy branch that I will not push due to spaghetti code. If you want to contribute, please do so.
+
 ## How does Fick compare to AO3 and other OTW-Archive software sites like SquidgeWorld Archive?
 
 Fick differs in a few key ways:
@@ -22,11 +25,6 @@ pnpm install
 To run in development mode:
 
 ```sh
-pnpm run dev
-```
-
-By default, both the frontend and backend start on:
-
-```txt
-https://localhost:3000
+pnpm run dev:backend
+pnpm run dev:frontend
 ```
