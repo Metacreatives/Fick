@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import { registerWorkRoutes } from "./api/works.ts";
 
 export function buildApp() {
     const app = Fastify({
@@ -10,6 +11,8 @@ export function buildApp() {
             status: "ok",
         };
     });
+
+    registerWorkRoutes(app);
 
     return app;
 }
