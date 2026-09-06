@@ -1,7 +1,7 @@
 import type { RouteObject } from "react-router";
 
 import { RootLayout } from "./RootLayout";
-import { HomePage } from "../pages/HomePage";
+import { homeLoader, HomePage } from "../pages/HomePage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 
 export const routes: RouteObject[] = [
@@ -11,6 +11,7 @@ export const routes: RouteObject[] = [
         children: [
             {
                 index: true,
+                loader: homeLoader,
                 Component: HomePage,
             },
             {

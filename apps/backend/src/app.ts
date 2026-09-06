@@ -5,7 +5,7 @@ export function buildApp() {
         logger: true,
     });
 
-    app.get("/health", async () => {
+    app.get("/api/health", async () => {
         return {
             status: "ok",
         };
