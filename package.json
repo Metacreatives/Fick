@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "dev:frontend": "pnpm --filter @fick/frontend dev",
+    "dev:backend": "pnpm --filter @fick/backend dev",
     "build:frontend": "pnpm --filter @fick/frontend build",
+    "build:backend": "pnpm --filter @fick/backend build",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",
