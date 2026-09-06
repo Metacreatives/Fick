@@ -3,6 +3,7 @@ import type { RouteObject } from "react-router";
 import { RootLayout } from "./RootLayout";
 import { homeLoader, HomePage } from "../pages/HomePage";
 import { NotFoundPage } from "../pages/NotFoundPage";
+import { WorkErrorBoundary, workLoader, WorkPage } from "../pages/WorkPage";
 
 export const routes: RouteObject[] = [
     {
@@ -13,6 +14,12 @@ export const routes: RouteObject[] = [
                 index: true,
                 loader: homeLoader,
                 Component: HomePage,
+            },
+            {
+                path: "works/:id",
+                loader: workLoader,
+                Component: WorkPage,
+                ErrorBoundary: WorkErrorBoundary
             },
             {
                 path: "*",

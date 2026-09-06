@@ -115,6 +115,9 @@ importers:
 
   apps/backend:
     dependencies:
+      '@fick/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       fastify:
         specifier: ^5.12.3
         version: 5.12.3
@@ -128,6 +131,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@fick/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -156,6 +162,8 @@ importers:
       vite:
         specifier: ^8.2.2
         version: 8.2.2(@types/node@24.13.3)
+
+  packages/shared: {}
 
 packages:
 

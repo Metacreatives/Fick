@@ -1,4 +1,4 @@
-import type { Work } from "../domains/work.ts";
+import type { Work } from "@fick/shared/domains/work";
 
 export const works = new Map<string, Work>([
   [

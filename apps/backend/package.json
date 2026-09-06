@@ -12,6 +12,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@fick/shared": "workspace:*",
     "fastify": "^5.12.3"
   },
   "devDependencies": {

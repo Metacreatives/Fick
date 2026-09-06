@@ -1,0 +1,9 @@
+{
+  "name": "@fick/shared",
+  "private": true,
+  "version": "2026.9.1",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  }
+}
