@@ -1,13 +1,15 @@
 {
   "name": "fick",
-  "version": "2026.9.1",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:frontend": "pnpm --filter @fick/frontend dev",
+    "build:frontend": "pnpm --filter @fick/frontend build",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:write": "biome check --write ."
   },
-  "keywords": [],
-  "author": "",
+  "author": "Neocreatives",
   "license": "AGPL-3.0-or-later",
   "devEngines": {
     "packageManager": {
@@ -17,5 +19,7 @@
     }
   },
   "packageManager": "pnpm@12.3.4",
-  "type": "module"
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12"
+  }
 }
