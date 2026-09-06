@@ -6,12 +6,6 @@ export function buildApp() {
         logger: true,
     });
 
-    app.get("/api/health", async () => {
-        return {
-            status: "ok",
-        };
-    });
-
     registerWorkRoutes(app);
 
     return app;
