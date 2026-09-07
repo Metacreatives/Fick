@@ -13,13 +13,6 @@
   },
   "author": "Neocreatives",
   "license": "AGPL-3.0-or-later",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.3.4",
-      "onFail": "download"
-    }
-  },
   "packageManager": "pnpm@12.3.4",
   "devDependencies": {
     "@biomejs/biome": "^2.5.12"
