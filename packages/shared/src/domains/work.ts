@@ -1,7 +1,7 @@
 export type WorkVisibility = "public" | "logged_in" | "private";
 
 export type WorkResponse = {
-    work_id: string;
+    id: string;
     title: string;
     summary: string;
     created_at: string;
