@@ -11,7 +11,7 @@
     "check": "biome check .",
     "check:write": "biome check --write ."
   },
-  "author": "Neocreatives",
+  "author": "Metacreatives",
   "license": "AGPL-3.0-or-later",
   "packageManager": "pnpm@12.3.4",
   "devDependencies": {
