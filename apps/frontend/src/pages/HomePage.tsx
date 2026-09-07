@@ -1,4 +1,7 @@
-import { useLoaderData } from "react-router";
+import type { WorkResponse } from "@fick/shared/domains/work";
+import { useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router";
+import { listSavedWorks } from "../data/works.offline";
 
 export async function homeLoader(): Promise<any> {
     return {
@@ -8,6 +11,15 @@ export async function homeLoader(): Promise<any> {
 
 export function HomePage() {
     const comingSoon = useLoaderData<typeof homeLoader>();
+    const [savedWorks, setSavedWorks] = useState<WorkResponse[]>([]);
+
+    useEffect(() => {
+        async function loadSavedWorks() {
+            setSavedWorks(await listSavedWorks());
+        }
+
+        void loadSavedWorks();
+    }, []);
 
     return (
         <>
@@ -15,6 +27,20 @@ export function HomePage() {
             <p>An archive for transformative works.</p>
 
             <p>Works: {comingSoon.data}</p>
+
+            {savedWorks.length > 0 && (
+                <section>
+                    <h2>Saved for offline</h2>
+
+                    <ul>
+                        {savedWorks.map((work) => (
+                            <li key={work.id}>
+                                <Link to={`/works/${work.id}`}>{work.title}</Link>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )}
         </>
     );
 }

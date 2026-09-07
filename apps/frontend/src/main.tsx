@@ -18,3 +18,9 @@ createRoot(rootElement).render(
         <RouterProvider router={router} />
     </StrictMode>,
 );
+
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+        console.error("Could not register service worker", error);
+    });
+}
