@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "dev:frontend": "pnpm --filter @fick/frontend dev",
-    "dev:backend": "pnpm --filter @fick/backend dev",
+    "dev:backend": "node scripts/backend.mjs --run",
     "build:frontend": "pnpm --filter @fick/frontend build",
-    "build:backend": "pnpm --filter @fick/backend build",
+    "build:backend": "node scripts/backend.mjs",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",
