@@ -16,19 +16,27 @@ export class WorkUnavailableError extends Error {
     }
 }
 
+async function loadSavedWork(id: string) {
+    const savedWork = await getSavedWork(id);
+
+    if (savedWork) {
+        return savedWork;
+    }
+
+    throw new WorkUnavailableError();
+}
+
 export async function getWork(id: string): Promise<WorkResponse> {
     let response: Response;
 
     try {
         response = await fetch(`/api/works/${encodeURIComponent(id)}`);
     } catch {
-        const savedWork = await getSavedWork(id);
+        return loadSavedWork(id);
+    }
 
-        if (savedWork) {
-            return savedWork;
-        }
-
-        throw new WorkUnavailableError();
+    if (response.status >= 500 && response.status <= 599) {
+        return loadSavedWork(id);
     }
 
     if (response.status === 404) {

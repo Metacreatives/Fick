@@ -1,7 +1,7 @@
 import { initializeDatabase } from "./indexedDb/initialize";
 
 const DATABASE_NAME = "fick";
-const DATABASE_VERSION = 20260901;
+const DATABASE_VERSION = 20260902;
 
 let databasePromise: Promise<IDBDatabase> | undefined;
 

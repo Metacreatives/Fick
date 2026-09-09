@@ -16,7 +16,13 @@ export const routes: RouteObject[] = [
                 Component: HomePage,
             },
             {
-                path: "works/:id",
+                path: "works/:work_id",
+                loader: workLoader,
+                Component: WorkPage,
+                ErrorBoundary: WorkErrorBoundary
+            },
+            {
+                path: "works/:work_id/chapters/:chapter_number",
                 loader: workLoader,
                 Component: WorkPage,
                 ErrorBoundary: WorkErrorBoundary

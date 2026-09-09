@@ -1,7 +1,9 @@
+import { initializeChapters } from "./stores/chapters";
 import { initializeWorks } from "./stores/works";
 
 export const initializers = [
-    initializeWorks
+    initializeWorks,
+    initializeChapters
 ];
 
 export function initializeDatabase(database: IDBDatabase) {

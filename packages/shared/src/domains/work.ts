@@ -8,4 +8,5 @@ export type WorkResponse = {
     updated_at: string;
     visibility: WorkVisibility;
     series_id: string | null;
+    chapter_count: string;
 }

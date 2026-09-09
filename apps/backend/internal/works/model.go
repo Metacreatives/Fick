@@ -9,11 +9,12 @@ const (
 )
 
 type Work struct {
-	ID         string         `json:"id"`
-	Title      string         `json:"title"`
-	Summary    string         `json:"summary"`
-	CreatedAt  string         `json:"created_at"`
-	UpdatedAt  string         `json:"updated_at"`
-	Visibility WorkVisibility `json:"visibility"`
-	SeriesID   *string        `json:"series_id"`
+	ID           string         `json:"id"`
+	Title        string         `json:"title"`
+	Summary      string         `json:"summary"`
+	CreatedAt    string         `json:"created_at"`
+	UpdatedAt    string         `json:"updated_at"`
+	Visibility   WorkVisibility `json:"visibility"`
+	SeriesID     *string        `json:"series_id"`
+	ChapterCount string         `json:"chapter_count"`
 }
