@@ -1,7 +1,7 @@
 const CACHE_PREFIX = "fick-";
-const CACHE_NAME = "fick-20260901";
+const CACHE_NAME = "fick-20260905";
 
-const APP_SHELL = "/";
+const APP_SHELL = "/index.html";
 const MANIFEST_URL = "/manifest.json";
 
 self.addEventListener("install", (event) => {
@@ -52,6 +52,7 @@ self.addEventListener("fetch", (event) => {
 async function cacheAppShell() {
   const manifestResponse = await fetch(MANIFEST_URL, {
     cache: "no-store",
+    redirect: "error",
   });
 
   if (!manifestResponse.ok) {
@@ -76,7 +77,19 @@ async function cacheAppShell() {
   }
 
   const cache = await caches.open(CACHE_NAME);
-  await cache.addAll([...urls]);
+
+  for (const url of urls) {
+    const response = await fetch(url, {
+      cache: "no-store",
+      redirect: "error",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Could not cache ${url}: ${response.status}`);
+    }
+
+    await cache.put(url, response);
+  }
 }
 
 async function deleteOldCaches() {
@@ -90,17 +103,10 @@ async function deleteOldCaches() {
 }
 
 async function handleNavigation(request) {
-  const cache = await caches.open(CACHE_NAME);
-
   try {
-    const response = await fetch(request);
-
-    if (response.ok) {
-      await cache.put(APP_SHELL, response.clone());
-    }
-
-    return response;
+    return await fetch(request);
   } catch {
+    const cache = await caches.open(CACHE_NAME);
     const cachedShell = await cache.match(APP_SHELL);
 
     if (cachedShell) {

@@ -3,35 +3,35 @@ import { getDatabase, waitForRequest, waitForTransaction } from "../common/index
 import { WORKS_STORE } from "../common/indexedDb/stores/works";
 
 export async function saveWork(work: WorkResponse): Promise<void> {
-    const database = await getDatabase();
-    const transaction = database.transaction(WORKS_STORE, "readwrite");
+  const database = await getDatabase();
+  const transaction = database.transaction(WORKS_STORE, "readwrite");
 
-    transaction.objectStore(WORKS_STORE).put(work);
+  transaction.objectStore(WORKS_STORE).put(work);
 
-    await waitForTransaction(transaction);
+  await waitForTransaction(transaction);
 }
 
 export async function getSavedWork(id: string): Promise<WorkResponse | undefined> {
-    const database = await getDatabase();
-    const transaction = database.transaction(WORKS_STORE, "readonly");
-    const request = transaction.objectStore(WORKS_STORE).get(id);
+  const database = await getDatabase();
+  const transaction = database.transaction(WORKS_STORE, "readonly");
+  const request = transaction.objectStore(WORKS_STORE).get(id);
 
-    return waitForRequest<WorkResponse | undefined>(request);
+  return waitForRequest<WorkResponse | undefined>(request);
 }
 
 export async function deleteSavedWork(id: string): Promise<void> {
-    const database = await getDatabase();
-    const transaction = database.transaction(WORKS_STORE, "readwrite");
+  const database = await getDatabase();
+  const transaction = database.transaction(WORKS_STORE, "readwrite");
 
-    transaction.objectStore(WORKS_STORE).delete(id);
+  transaction.objectStore(WORKS_STORE).delete(id);
 
-    await waitForTransaction(transaction);
+  await waitForTransaction(transaction);
 }
 
 export async function listSavedWorks(): Promise<WorkResponse[]> {
-    const database = await getDatabase();
-    const transaction = database.transaction(WORKS_STORE, "readonly");
-    const request = transaction.objectStore(WORKS_STORE).getAll();
+  const database = await getDatabase();
+  const transaction = database.transaction(WORKS_STORE, "readonly");
+  const request = transaction.objectStore(WORKS_STORE).getAll();
 
-    return waitForRequest<WorkResponse[]>(request);
+  return waitForRequest<WorkResponse[]>(request);
 }

@@ -8,14 +8,7 @@ const executablePath = join(backendDirectory, "build", executableName);
 
 const build = spawnSync(
   "go",
-  [
-    "-C",
-    backendDirectory,
-    "build",
-    "-o",
-    join("build", executableName),
-    "./cmd/server",
-  ],
+  ["-C", backendDirectory, "build", "-o", join("build", executableName), "./cmd/server"],
   {
     stdio: "inherit",
     shell: false,
