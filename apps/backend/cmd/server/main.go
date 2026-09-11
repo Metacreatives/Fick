@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fick/backend/internal/muxes"
-	"fick/backend/internal/renderer"
+	"fick/backend/internal/api"
+	"fick/backend/internal/frontend"
 	"log"
 	"net/http"
 	"os"
@@ -26,7 +26,7 @@ func main() {
 		"renderer.mjs",
 	)
 
-	rendererProcess, err := renderer.Start(
+	rendererProcess, err := frontend.Start(
 		rendererPath,
 		"http://127.0.0.1:3000",
 	)
@@ -42,7 +42,7 @@ func main() {
 
 	mux.Handle(
 		"/api/",
-		http.StripPrefix("/api", muxes.APIRoutes()),
+		http.StripPrefix("/api", api.APIRoutes()),
 	)
 
 	frontendDirectory := filepath.Join(
@@ -73,7 +73,7 @@ func main() {
 	var frontendHandler http.Handler
 
 	if rendererProcess != nil {
-		frontendHandler, err = muxes.FrontendHandler(
+		frontendHandler, err = frontend.FrontendHandler(
 			rendererProcess,
 			clientDirectory,
 			rendererBundlePath,

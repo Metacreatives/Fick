@@ -9,20 +9,20 @@ import (
 	"sync"
 )
 
-type ArtifactStore struct {
+type artifactStore struct {
 	root    string
 	version string
 	mu      sync.Mutex
 }
 
-func NewArtifactStore(root, version string) *ArtifactStore {
-	return &ArtifactStore{
+func newArtifactStore(root, version string) *artifactStore {
+	return &artifactStore{
 		root:    root,
 		version: version,
 	}
 }
 
-func (s *ArtifactStore) Read(route string) ([]byte, bool, error) {
+func (s *artifactStore) read(route string) ([]byte, bool, error) {
 	data, err := os.ReadFile(s.filePath(route))
 
 	if errors.Is(err, os.ErrNotExist) {
@@ -36,7 +36,7 @@ func (s *ArtifactStore) Read(route string) ([]byte, bool, error) {
 	return data, true, nil
 }
 
-func (s *ArtifactStore) Write(route string, data string) error {
+func (s *artifactStore) write(route string, data string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -83,7 +83,7 @@ func (s *ArtifactStore) Write(route string, data string) error {
 	return os.Rename(tempPath, filePath)
 }
 
-func (s *ArtifactStore) filePath(route string) string {
+func (s *artifactStore) filePath(route string) string {
 	sum := sha256.Sum256([]byte(route))
 
 	return filepath.Join(

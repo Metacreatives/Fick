@@ -1,4 +1,4 @@
-package renderer
+package frontend
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-type RenderResult struct {
+type renderResult struct {
 	HTML       string
 	StatusCode int
 }
@@ -25,7 +25,7 @@ type renderResponse struct {
 	Error      string `json:"error"`
 }
 
-type Renderer struct {
+type renderer struct {
 	mu sync.Mutex
 
 	cmd     *exec.Cmd
@@ -36,7 +36,7 @@ type Renderer struct {
 	closed bool
 }
 
-func Start(scriptPath, apiOrigin string) (*Renderer, error) {
+func Start(scriptPath, apiOrigin string) (*renderer, error) {
 	cmd := exec.Command("node", scriptPath, apiOrigin)
 
 	stdin, err := cmd.StdinPipe()
@@ -57,7 +57,7 @@ func Start(scriptPath, apiOrigin string) (*Renderer, error) {
 		return nil, fmt.Errorf("start renderer: %w", err)
 	}
 
-	return &Renderer{
+	return &renderer{
 		cmd:     cmd,
 		stdin:   stdin,
 		encoder: json.NewEncoder(stdin),
@@ -65,22 +65,22 @@ func Start(scriptPath, apiOrigin string) (*Renderer, error) {
 	}, nil
 }
 
-func (r *Renderer) Render(url string) (RenderResult, error) {
+func (r *renderer) Render(url string) (renderResult, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	if r.closed {
-		return RenderResult{}, errors.New("renderer is closed")
+		return renderResult{}, errors.New("renderer is closed")
 	}
 
 	if url == "" {
-		return RenderResult{}, errors.New("render URL is empty")
+		return renderResult{}, errors.New("render URL is empty")
 	}
 
 	if err := r.encoder.Encode(renderRequest{
 		URL: url,
 	}); err != nil {
-		return RenderResult{}, fmt.Errorf(
+		return renderResult{}, fmt.Errorf(
 			"send render request: %w",
 			err,
 		)
@@ -89,33 +89,33 @@ func (r *Renderer) Render(url string) (RenderResult, error) {
 	var response renderResponse
 
 	if err := r.decoder.Decode(&response); err != nil {
-		return RenderResult{}, fmt.Errorf(
+		return renderResult{}, fmt.Errorf(
 			"read render response: %w",
 			err,
 		)
 	}
 
 	if response.Error != "" {
-		return RenderResult{}, fmt.Errorf(
+		return renderResult{}, fmt.Errorf(
 			"renderer: %s",
 			response.Error,
 		)
 	}
 
 	if response.StatusCode < 100 || response.StatusCode > 599 {
-		return RenderResult{}, fmt.Errorf(
+		return renderResult{}, fmt.Errorf(
 			"renderer returned invalid status code %d",
 			response.StatusCode,
 		)
 	}
 
-	return RenderResult{
+	return renderResult{
 		HTML:       response.HTML,
 		StatusCode: response.StatusCode,
 	}, nil
 }
 
-func (r *Renderer) Close() error {
+func (r *renderer) Close() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

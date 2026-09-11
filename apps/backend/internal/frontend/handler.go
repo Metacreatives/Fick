@@ -1,8 +1,6 @@
-package muxes
+package frontend
 
 import (
-	"fick/backend/internal/muxes/frontend"
-	"fick/backend/internal/renderer"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,15 +12,15 @@ import (
 const ssrOutlet = "<!--ssr-outlet-->"
 
 type Handler struct {
-	renderer   *renderer.Renderer
+	renderer   *renderer
 	template   string
 	fileServer http.Handler
 	clientDir  string
-	artifacts  *frontend.ArtifactStore
+	artifacts  *artifactStore
 }
 
 func FrontendHandler(
-	rendererProcess *renderer.Renderer,
+	rendererProcess *renderer,
 	clientDirectory string,
 	rendererBundlePath string,
 	artifactDirectory string,
@@ -47,7 +45,7 @@ func FrontendHandler(
 		return nil, err
 	}
 
-	version := frontend.BuildVersion(
+	version := buildVersion(
 		template,
 		rendererBundle,
 	)
@@ -57,7 +55,7 @@ func FrontendHandler(
 		template:   template,
 		clientDir:  clientDirectory,
 		fileServer: http.FileServer(http.Dir(clientDirectory)),
-		artifacts: frontend.NewArtifactStore(artifactDirectory,
+		artifacts: newArtifactStore(artifactDirectory,
 			version),
 	}, nil
 }
@@ -85,13 +83,13 @@ func (h *Handler) serveRenderedPage(
 ) {
 	artifactRoute := path.Clean(r.URL.Path)
 
-	cacheable := frontend.IsArtifactRoute(
+	cacheable := IsArtifactRoute(
 		artifactRoute,
 		r.URL.RawQuery,
 	)
 
 	if cacheable {
-		artifact, found, err := h.artifacts.Read(
+		artifact, found, err := h.artifacts.read(
 			artifactRoute,
 		)
 
@@ -105,7 +103,7 @@ func (h *Handler) serveRenderedPage(
 		}
 
 		if found {
-			frontend.WriteHTML(
+			writeHTML(
 				w,
 				http.StatusOK,
 				artifact,
@@ -135,7 +133,7 @@ func (h *Handler) serveRenderedPage(
 	)
 
 	if cacheable && result.StatusCode == http.StatusOK {
-		if err := h.artifacts.Write(
+		if err := h.artifacts.write(
 			artifactRoute,
 			document,
 		); err != nil {
@@ -146,7 +144,7 @@ func (h *Handler) serveRenderedPage(
 		}
 	}
 
-	frontend.WriteHTML(
+	writeHTML(
 		w,
 		result.StatusCode,
 		[]byte(document),

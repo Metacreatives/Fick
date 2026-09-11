@@ -1,7 +1,6 @@
-package muxes
+package api
 
 import (
-	"fick/backend/internal/muxes/api"
 	"net/http"
 )
 
@@ -10,7 +9,7 @@ func APIRoutes() http.Handler {
 
 	mux.Handle(
 		"/works/",
-		http.StripPrefix("/works", api.WorkRoutes()),
+		http.StripPrefix("/works", WorkRoutes()),
 	)
 
 	return mux

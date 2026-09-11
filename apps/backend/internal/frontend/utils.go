@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func BuildVersion(
+func buildVersion(
 	template string,
 	rendererBundle []byte,
 ) string {
@@ -22,7 +22,7 @@ func BuildVersion(
 	return hex.EncodeToString(sum[:8])
 }
 
-func WriteHTML(
+func writeHTML(
 	w http.ResponseWriter,
 	statusCode int,
 	document []byte,
