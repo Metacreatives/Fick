@@ -19,7 +19,7 @@ type Handler struct {
 	artifacts  *artifactStore
 }
 
-func FrontendHandler(
+func NewHandler(
 	rendererProcess *renderer,
 	clientDirectory string,
 	rendererBundlePath string,

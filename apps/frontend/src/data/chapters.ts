@@ -1,4 +1,4 @@
-import type { ChapterResponse } from "@fick/shared/domains/chapter";
+import type { ChapterResponse } from "../domains/chapter";
 import { getSavedChapter } from "./chapters.offline";
 import type { DataEnvironment } from "../app/dataEnvironment";
 

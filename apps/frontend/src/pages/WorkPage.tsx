@@ -6,10 +6,10 @@ import {
   type LoaderFunctionArgs,
 } from "react-router";
 import { getWork, WorkNotFoundError, WorkUnavailableError } from "../data/works";
-import type { WorkResponse } from "@fick/shared/domains/work";
+import type { WorkResponse } from "../domains/work";
 import { deleteSavedWork, getSavedWork, saveWork } from "../data/works.offline";
 import { useEffect, useState } from "react";
-import type { ChapterResponse } from "@fick/shared/domains/chapter";
+import type { ChapterResponse } from "../domains/chapter";
 import { ChapterNotFoundError, ChapterUnavailableError, getChapter } from "../data/chapters";
 import { deleteSavedChapter, listSavedChapters, saveChapter } from "../data/chapters.offline";
 import { browserDataEnvironment, dataEnvironmentContext } from "../app/dataEnvironment";

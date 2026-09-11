@@ -1,4 +1,4 @@
-import type { ChapterResponse } from "@fick/shared/domains/chapter";
+import type { ChapterResponse } from "../domains/chapter";
 import { getDatabase, waitForRequest, waitForTransaction } from "../common/indexedDb";
 import { CHAPTERS_STORE, WORK_NUMBER_KEY } from "../common/indexedDb/stores/chapters";
 

@@ -1,4 +1,4 @@
-import type { WorkResponse } from "@fick/shared/domains/work";
+import type { WorkResponse } from "../domains/work";
 
 import { getSavedWork } from "./works.offline";
 import type { DataEnvironment } from "../app/dataEnvironment";

@@ -1,28 +1,28 @@
 package works
 
-import (
-	"encoding/json"
-	"fick/backend/internal/store"
-)
+import "context"
 
-func findPublicWorkByID(id string) (Work, bool) {
-	var works []Work
+func findPublicWorkByID(
+	ctx context.Context,
+	repository *Repository,
+	id string,
+) (Work, bool, error) {
+	work, found, err := repository.FindByID(
+		ctx,
+		id,
+	)
 
-	if err := json.Unmarshal([]byte(store.Works), &works); err != nil {
-		return Work{}, false
+	if err != nil {
+		return Work{}, false, err
 	}
 
-	for _, work := range works {
-		if work.ID != id {
-			continue
-		}
-
-		if work.Visibility != WorkVisibilityPublic {
-			return Work{}, false
-		}
-
-		return work, true
+	if !found {
+		return Work{}, false, nil
 	}
 
-	return Work{}, false
+	if work.Visibility != WorkVisibilityPublic {
+		return Work{}, false, nil
+	}
+
+	return work, true, nil
 }

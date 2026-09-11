@@ -1,0 +1,155 @@
+openapi: 3.1.0
+
+info:
+  title: Fick API
+  version: 2026.09.01
+
+paths:
+  /api/works/{id}:
+    get:
+      operationId: getWork
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Work
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkResponse"
+
+        "404":
+          description: Work not found
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/works/{work_id}/chapters/{chapter_number}:
+    get:
+      operationId: getChapter
+
+      parameters:
+        - name: work_id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: chapter_number
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Chapter
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChapterResponse"
+
+components:
+  schemas:
+    WorkVisibility:
+      type: string
+
+      enum:
+        - public
+        - logged_in
+        - private
+
+    WorkResponse:
+      type: object
+      additionalProperties: false
+
+      required:
+        - id
+        - title
+        - summary
+        - visibility
+        - created_at
+        - updated_at
+
+      properties:
+        id:
+          type: string
+
+        title:
+          type: string
+
+        summary:
+          type: string
+
+        visibility:
+          $ref: "#/components/schemas/WorkVisibility"
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time
+
+    ChapterResponse:
+      type: object
+      additionalProperties: false
+
+      required:
+        - id
+        - work_id
+        - number
+        - title
+        - created_at
+        - updated_at
+        - content_format
+        - content_raw
+
+      properties:
+        id:
+          type: string
+
+        work_id:
+          type: string
+
+        number:
+          type: string
+
+        title:
+          type: string
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time
+
+        content_format:
+          type: string
+
+        content_raw:
+          type: string
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+
+      required:
+        - error
+
+      properties:
+        error:
+          type: string

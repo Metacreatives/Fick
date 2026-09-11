@@ -4,17 +4,27 @@
   "scripts": {
     "dev:frontend": "pnpm --filter @fick/frontend dev",
     "dev:backend": "node scripts/backend.mjs --run",
+    "dev:db": "go -C apps/backend run ./cmd/db_dev",
+    "db:migrate": "cross-env-shell \"go -C apps/backend tool goose -dir db/migrations postgres \\\"$DATABASE_URL\\\" up\"",
     "build:frontend": "pnpm --filter @fick/frontend build",
     "build:backend": "node scripts/backend.mjs",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",
-    "check:write": "biome check --write ."
+    "check:write": "biome check --write .",
+    "check:generated": "pnpm generate && git diff --exit-code",
+    "generate": "pnpm generate:db && pnpm generate:api",
+    "generate:db": "go -C apps/backend tool sqlc generate",
+    "generate:api": "pnpm generate:api:go && pnpm generate:api:ts",
+    "generate:api:go": "go -C apps/backend tool oapi-codegen -config openapi-codegen.yaml ../../api/openapi.yaml",
+    "generate:api:ts": "openapi-typescript api/openapi.yaml -o apps/frontend/src/generated/api.ts"
   },
   "author": "Metacreatives",
   "license": "AGPL-3.0-or-later",
   "packageManager": "pnpm@12.3.4",
   "devDependencies": {
-    "@biomejs/biome": "^2.5.12"
+    "@biomejs/biome": "^2.5.12",
+    "cross-env": "^10.1.0",
+    "openapi-typescript": "^7.13.0"
   }
 }

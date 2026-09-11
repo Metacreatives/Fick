@@ -1,4 +1,4 @@
-import type { WorkResponse } from "@fick/shared/domains/work";
+import type { WorkResponse } from "../domains/work";
 import { getDatabase, waitForRequest, waitForTransaction } from "../common/indexedDb";
 import { WORKS_STORE } from "../common/indexedDb/stores/works";
 

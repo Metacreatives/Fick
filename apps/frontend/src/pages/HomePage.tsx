@@ -1,4 +1,4 @@
-import type { WorkResponse } from "@fick/shared/domains/work";
+import type { WorkResponse } from "../domains/work";
 import { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import { listSavedWorks } from "../data/works.offline";

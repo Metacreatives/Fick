@@ -5,24 +5,58 @@ import (
 	"net/http"
 )
 
-func GetWork(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
+func GetWork(
+	repository *Repository,
+) http.HandlerFunc {
+	return func(
+		w http.ResponseWriter,
+		r *http.Request,
+	) {
+		id := r.PathValue("id")
 
-	work, success := findPublicWorkByID(id)
+		work, found, err := findPublicWorkByID(
+			r.Context(),
+			repository,
+			id,
+		)
 
-	if success == false {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotFound)
+		if err != nil {
+			http.Error(
+				w,
+				"failed to load work",
+				http.StatusInternalServerError,
+			)
+			return
+		}
 
-		json.NewEncoder(w).Encode(map[string]string{
-			"error": "work_not_found",
-		})
-		return
-	}
+		if !found {
+			w.Header().Set(
+				"Content-Type",
+				"application/json",
+			)
 
-	w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
 
-	if err := json.NewEncoder(w).Encode(work); err != nil {
-		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+			_ = json.NewEncoder(w).Encode(
+				map[string]string{
+					"error": "work_not_found",
+				},
+			)
+
+			return
+		}
+
+		w.Header().Set(
+			"Content-Type",
+			"application/json",
+		)
+
+		if err := json.NewEncoder(w).Encode(work); err != nil {
+			http.Error(
+				w,
+				"failed to encode response",
+				http.StatusInternalServerError,
+			)
+		}
 	}
 }

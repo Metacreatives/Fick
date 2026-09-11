@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
 	"fick/backend/internal/api"
+	"fick/backend/internal/chapters"
+	"fick/backend/internal/database"
+	dbgen "fick/backend/internal/database/generated"
 	"fick/backend/internal/frontend"
+	"fick/backend/internal/works"
 	"log"
 	"net/http"
 	"os"
@@ -38,11 +43,37 @@ func main() {
 		defer rendererProcess.Close()
 	}
 
+	ctx := context.Background()
+
+	databaseURL := os.Getenv("DATABASE_URL")
+
+	if databaseURL == "" {
+		log.Fatal("DATABASE_URL is required")
+	}
+
+	pool, err := database.Open(
+		ctx,
+		databaseURL,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer pool.Close()
+
+	queries := dbgen.New(pool)
+
+	workRepository := works.NewRepository(queries)
+	chapterRepository := chapters.NewRepository(queries)
+
 	mux := http.NewServeMux()
 
 	mux.Handle(
 		"/api/",
-		http.StripPrefix("/api", api.APIRoutes()),
+		http.StripPrefix("/api", api.APIRoutes(
+			workRepository,
+			chapterRepository,
+		)),
 	)
 
 	frontendDirectory := filepath.Join(
@@ -73,7 +104,7 @@ func main() {
 	var frontendHandler http.Handler
 
 	if rendererProcess != nil {
-		frontendHandler, err = frontend.FrontendHandler(
+		frontendHandler, err = frontend.NewHandler(
 			rendererProcess,
 			clientDirectory,
 			rendererBundlePath,
