@@ -45,7 +45,6 @@ func (r *Repository) FindByID(
 		CreatedAt:    row.CreatedAt.Time.Format(time.RFC3339Nano),
 		UpdatedAt:    row.UpdatedAt.Time.Format(time.RFC3339Nano),
 		Visibility:   WorkVisibility(row.Visibility),
-		SeriesID:     nil,
 		ChapterCount: strconv.FormatInt(row.ChapterCount, 10),
 	}
 

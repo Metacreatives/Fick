@@ -47,12 +47,13 @@ type ErrorResponse struct {
 
 // WorkResponse defines model for WorkResponse.
 type WorkResponse struct {
-	CreatedAt  time.Time      `json:"created_at"`
-	Id         string         `json:"id"`
-	Summary    string         `json:"summary"`
-	Title      string         `json:"title"`
-	UpdatedAt  time.Time      `json:"updated_at"`
-	Visibility WorkVisibility `json:"visibility"`
+	ChapterCount string         `json:"chapter_count"`
+	CreatedAt    time.Time      `json:"created_at"`
+	Id           string         `json:"id"`
+	Summary      string         `json:"summary"`
+	Title        string         `json:"title"`
+	UpdatedAt    time.Time      `json:"updated_at"`
+	Visibility   WorkVisibility `json:"visibility"`
 }
 
 // WorkVisibility defines model for WorkVisibility.

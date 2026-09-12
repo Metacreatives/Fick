@@ -4,130 +4,131 @@
  */
 
 export interface paths {
-  "/api/works/{id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/works/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getWork"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get: operations["getWork"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/works/{work_id}/chapters/{chapter_number}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/works/{work_id}/chapters/{chapter_number}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getChapter"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get: operations["getChapter"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** @enum {string} */
-    WorkVisibility: "public" | "logged_in" | "private";
-    WorkResponse: {
-      id: string;
-      title: string;
-      summary: string;
-      visibility: components["schemas"]["WorkVisibility"];
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      updated_at: string;
+    schemas: {
+        /** @enum {string} */
+        WorkVisibility: "public" | "logged_in" | "private";
+        WorkResponse: {
+            id: string;
+            title: string;
+            summary: string;
+            visibility: components["schemas"]["WorkVisibility"];
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            chapter_count: string;
+        };
+        ChapterResponse: {
+            id: string;
+            work_id: string;
+            number: string;
+            title: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            content_format: string;
+            content_raw: string;
+        };
+        ErrorResponse: {
+            error: string;
+        };
     };
-    ChapterResponse: {
-      id: string;
-      work_id: string;
-      number: string;
-      title: string;
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      updated_at: string;
-      content_format: string;
-      content_raw: string;
-    };
-    ErrorResponse: {
-      error: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  getWork: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: string;
-      };
-      cookie?: never;
+    getWork: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Work */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkResponse"];
+                };
+            };
+            /** @description Work not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Work */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    getChapter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                work_id: string;
+                chapter_number: string;
+            };
+            cookie?: never;
         };
-        content: {
-          "application/json": components["schemas"]["WorkResponse"];
+        requestBody?: never;
+        responses: {
+            /** @description Chapter */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChapterResponse"];
+                };
+            };
         };
-      };
-      /** @description Work not found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["ErrorResponse"];
-        };
-      };
     };
-  };
-  getChapter: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        work_id: string;
-        chapter_number: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Chapter */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["ChapterResponse"];
-        };
-      };
-    };
-  };
 }

@@ -15,6 +15,5 @@ type Work struct {
 	CreatedAt    string         `json:"created_at"`
 	UpdatedAt    string         `json:"updated_at"`
 	Visibility   WorkVisibility `json:"visibility"`
-	SeriesID     *string        `json:"series_id"`
 	ChapterCount string         `json:"chapter_count"`
 }

@@ -80,6 +80,7 @@ components:
         - visibility
         - created_at
         - updated_at
+        - chapter_count
 
       properties:
         id:
@@ -101,6 +102,9 @@ components:
         updated_at:
           type: string
           format: date-time
+        
+        chapter_count:
+          type: string
 
     ChapterResponse:
       type: object
