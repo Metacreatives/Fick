@@ -2,6 +2,8 @@ package chapters
 
 import (
 	"encoding/json"
+	responses "fick/backend/internal/api/generated"
+	"fmt"
 	"net/http"
 )
 
@@ -46,12 +48,22 @@ func GetChapter(repository *Repository) http.HandlerFunc {
 			return
 		}
 
+		chapterResponse := responses.ChapterResponse{
+			ContentFormat: chapter.ContentFormat,
+			ContentRaw:    chapter.ContentRaw,
+			CreatedAt:     chapter.CreatedAt.Time,
+			Id:            fmt.Sprint(chapter.ID, 10),
+			Number:        fmt.Sprint(chapter.Number, 10),
+			Title:         chapter.Title,
+			UpdatedAt:     chapter.UpdatedAt.Time,
+		}
+
 		w.Header().Set(
 			"Content-Type",
 			"application/json",
 		)
 
-		if err := json.NewEncoder(w).Encode(chapter); err != nil {
+		if err := json.NewEncoder(w).Encode(chapterResponse); err != nil {
 			http.Error(
 				w,
 				"failed to encode response",

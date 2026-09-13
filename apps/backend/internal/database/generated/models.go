@@ -20,10 +20,11 @@ type Chapter struct {
 }
 
 type User struct {
-	ID        int64
-	Username  string
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID           int64
+	Username     string
+	PasswordHash string
+	CreatedAt    pgtype.Timestamptz
+	UpdatedAt    pgtype.Timestamptz
 }
 
 type UsersWork struct {

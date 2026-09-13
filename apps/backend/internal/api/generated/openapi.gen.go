@@ -37,12 +37,26 @@ type ChapterResponse struct {
 	Number        string    `json:"number"`
 	Title         string    `json:"title"`
 	UpdatedAt     time.Time `json:"updated_at"`
-	WorkId        string    `json:"work_id"`
+	WorkId        *string   `json:"work_id,omitempty"`
 }
 
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error string `json:"error"`
+}
+
+// RegisterUserRequest defines model for RegisterUserRequest.
+type RegisterUserRequest struct {
+	Password *string `json:"password,omitempty"`
+	Username string  `json:"username"`
+}
+
+// UserResponse defines model for UserResponse.
+type UserResponse struct {
+	CreatedAt time.Time `json:"created_at"`
+	Id        string    `json:"id"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Username  string    `json:"username"`
 }
 
 // WorkResponse defines model for WorkResponse.
@@ -58,3 +72,6 @@ type WorkResponse struct {
 
 // WorkVisibility defines model for WorkVisibility.
 type WorkVisibility string
+
+// RegisterUserJSONRequestBody defines body for RegisterUser for application/json ContentType.
+type RegisterUserJSONRequestBody = RegisterUserRequest

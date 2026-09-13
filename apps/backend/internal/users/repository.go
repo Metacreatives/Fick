@@ -1,4 +1,4 @@
-package works
+package users
 
 import (
 	"context"
@@ -22,19 +22,19 @@ func NewRepository(queries *database.Queries) *Repository {
 func (r *Repository) FindByID(
 	ctx context.Context,
 	id string,
-) (database.GetWorkByIDRow, bool, error) {
+) (database.GetUserByIDRow, bool, error) {
 	databaseID, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		return database.GetWorkByIDRow{}, false, nil
+		return database.GetUserByIDRow{}, false, nil
 	}
 
-	row, err := r.queries.GetWorkByID(ctx, databaseID)
+	row, err := r.queries.GetUserByID(ctx, databaseID)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return database.GetWorkByIDRow{}, false, nil
+		return database.GetUserByIDRow{}, false, nil
 	}
 
 	if err != nil {
-		return database.GetWorkByIDRow{}, false, err
+		return database.GetUserByIDRow{}, false, err
 	}
 
 	return row, true, nil

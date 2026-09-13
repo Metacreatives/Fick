@@ -1,13 +1,13 @@
-package works
+package users
 
 import (
 	"encoding/json"
 	responses "fick/backend/internal/api/generated"
-	"fmt"
 	"net/http"
+	"strconv"
 )
 
-func GetWork(
+func GetUser(
 	repository *Repository,
 ) http.HandlerFunc {
 	return func(
@@ -16,7 +16,7 @@ func GetWork(
 	) {
 		id := r.PathValue("id")
 
-		work, found, err := findPublicWorkByID(
+		user, found, err := findUserByID(
 			r.Context(),
 			repository,
 			id,
@@ -25,7 +25,7 @@ func GetWork(
 		if err != nil {
 			http.Error(
 				w,
-				"failed to load work",
+				"failed to load user",
 				http.StatusInternalServerError,
 			)
 			return
@@ -41,21 +41,18 @@ func GetWork(
 
 			_ = json.NewEncoder(w).Encode(
 				map[string]string{
-					"error": "work_not_found",
+					"error": "user_not_found",
 				},
 			)
 
 			return
 		}
 
-		workResponse := responses.WorkResponse{
-			ChapterCount: fmt.Sprint(work.ChapterCount, 10),
-			CreatedAt:    work.CreatedAt.Time,
-			Id:           fmt.Sprint(work.ID, 10),
-			Summary:      work.Summary,
-			Title:        work.Title,
-			UpdatedAt:    work.UpdatedAt.Time,
-			Visibility:   responses.WorkVisibility(work.Visibility),
+		userResponse := responses.UserResponse{
+			CreatedAt: user.CreatedAt.Time,
+			Id:        strconv.FormatInt(user.ID, 10),
+			UpdatedAt: user.UpdatedAt.Time,
+			Username:  user.Username,
 		}
 
 		w.Header().Set(
@@ -63,7 +60,7 @@ func GetWork(
 			"application/json",
 		)
 
-		if err := json.NewEncoder(w).Encode(workResponse); err != nil {
+		if err := json.NewEncoder(w).Encode(userResponse); err != nil {
 			http.Error(
 				w,
 				"failed to encode response",

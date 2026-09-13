@@ -33,6 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /api/works/{work_id}/chapters/{chapter_number}:
     get:
       operationId: getChapter
@@ -58,6 +59,70 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChapterResponse"
+
+  /api/users:
+    post:
+      operationId: registerUser
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+
+      responses:
+        "201":
+          description: User created
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+        "400":
+          description: Registration failed
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+        "413":
+          description: Request body too large
+
+        "415":
+          description: Unsupported media type
+
+  /api/users/{id}:
+    get:
+      operationId: getUser
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: User
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+        "404":
+          description: User not found
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
@@ -102,7 +167,7 @@ components:
         updated_at:
           type: string
           format: date-time
-        
+
         chapter_count:
           type: string
 
@@ -112,7 +177,6 @@ components:
 
       required:
         - id
-        - work_id
         - number
         - title
         - created_at
@@ -157,3 +221,48 @@ components:
       properties:
         error:
           type: string
+
+    RegisterUserRequest:
+      type: object
+      additionalProperties: false
+
+      required:
+        - username
+        - password
+
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 64
+
+        password:
+          type: string
+          minLength: 15
+          maxLength: 256
+          writeOnly: true
+
+    UserResponse:
+      type: object
+      additionalProperties: false
+
+      required:
+        - id
+        - username
+        - created_at
+        - updated_at
+
+      properties:
+        id:
+          type: string
+
+        username:
+          type: string
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time

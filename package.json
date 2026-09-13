@@ -4,7 +4,6 @@
   "scripts": {
     "dev:frontend": "pnpm --filter @fick/frontend dev",
     "dev:backend": "node scripts/backend.mjs --run",
-    "dev:db": "go -C apps/backend run ./cmd/db_dev",
     "db:migrate": "cross-env-shell \"go -C apps/backend tool goose -dir db/migrations postgres \\\"$DATABASE_URL\\\" up\"",
     "build:frontend": "pnpm --filter @fick/frontend build",
     "build:backend": "node scripts/backend.mjs",

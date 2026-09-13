@@ -7,6 +7,7 @@ import (
 	"fick/backend/internal/database"
 	dbgen "fick/backend/internal/database/generated"
 	"fick/backend/internal/frontend"
+	"fick/backend/internal/users"
 	"fick/backend/internal/works"
 	"log"
 	"net/http"
@@ -65,6 +66,7 @@ func main() {
 
 	workRepository := works.NewRepository(queries)
 	chapterRepository := chapters.NewRepository(queries)
+	userRepository := users.NewRepository(queries)
 
 	mux := http.NewServeMux()
 
@@ -73,6 +75,7 @@ func main() {
 		http.StripPrefix("/api", api.APIRoutes(
 			workRepository,
 			chapterRepository,
+			userRepository,
 		)),
 	)
 

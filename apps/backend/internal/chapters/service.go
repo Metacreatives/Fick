@@ -1,13 +1,16 @@
 package chapters
 
-import "context"
+import (
+	"context"
+	database "fick/backend/internal/database/generated"
+)
 
 func findChapterByWorkAndNumber(
 	ctx context.Context,
 	repository *Repository,
 	workID string,
 	chapterNumber string,
-) (Chapter, bool, error) {
+) (database.Chapter, bool, error) {
 	return repository.FindByWorkAndNumber(
 		ctx,
 		workID,

@@ -1,27 +1,33 @@
 package works
 
-import "context"
+import (
+	"context"
+	responses "fick/backend/internal/api/generated"
+	database "fick/backend/internal/database/generated"
+)
 
 func findPublicWorkByID(
 	ctx context.Context,
 	repository *Repository,
 	id string,
-) (Work, bool, error) {
+) (database.GetWorkByIDRow, bool, error) {
 	work, found, err := repository.FindByID(
 		ctx,
 		id,
 	)
 
 	if err != nil {
-		return Work{}, false, err
+		return database.GetWorkByIDRow{}, false, err
 	}
 
 	if !found {
-		return Work{}, false, nil
+		return database.GetWorkByIDRow{}, false, nil
 	}
 
-	if work.Visibility != WorkVisibilityPublic {
-		return Work{}, false, nil
+	workVisibility := responses.WorkVisibility(work.Visibility)
+
+	if workVisibility != responses.Public {
+		return database.GetWorkByIDRow{}, false, nil
 	}
 
 	return work, true, nil
