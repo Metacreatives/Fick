@@ -4,6 +4,7 @@ import (
 	"context"
 	"fick/backend/internal/api"
 	"fick/backend/internal/chapters"
+	"fick/backend/internal/config"
 	"fick/backend/internal/database"
 	dbgen "fick/backend/internal/database/generated"
 	"fick/backend/internal/frontend"
@@ -17,6 +18,11 @@ import (
 )
 
 func main() {
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	executablePath, err := os.Executable()
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +40,7 @@ func main() {
 
 	rendererProcess, err := frontend.Start(
 		rendererPath,
-		"http://127.0.0.1:3000",
+		cfg.Address,
 	)
 
 	if err != nil {
@@ -46,15 +52,9 @@ func main() {
 
 	ctx := context.Background()
 
-	databaseURL := os.Getenv("DATABASE_URL")
-
-	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is required")
-	}
-
 	pool, err := database.Open(
 		ctx,
-		databaseURL,
+		cfg.DatabaseURL,
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -138,12 +138,12 @@ func main() {
 	}))
 
 	server := &http.Server{
-		Addr:              "127.0.0.1:3000",
+		Addr:              cfg.Address,
 		Handler:           mux,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	log.Println("Fick backend is now listening on http://127.0.0.1:3000")
+	log.Println("Fick backend is now listening on ", cfg.Address)
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
