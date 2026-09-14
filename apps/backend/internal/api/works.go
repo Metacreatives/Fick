@@ -7,13 +7,12 @@ import (
 )
 
 func WorkRoutes(
+	mux *http.ServeMux,
 	workRepository *works.Repository,
 	chapterRepository *chapters.Repository,
 ) http.Handler {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /{id}", works.GetWork(workRepository))
-	mux.HandleFunc("GET /{work_id}/chapters/{chapter_number}", chapters.GetChapter(chapterRepository))
+	mux.HandleFunc("GET /works/{id}", works.GetWork(workRepository))
+	mux.HandleFunc("GET /works/{work_id}/chapters/{chapter_number}", chapters.GetChapter(chapterRepository))
 
 	return mux
 }

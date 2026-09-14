@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type Repository struct {
@@ -38,4 +39,36 @@ func (r *Repository) FindByID(
 	}
 
 	return row, true, nil
+}
+
+var ErrUsernameUnavailable = errors.New(
+	"username unavailable",
+)
+
+func (r *Repository) Create(
+	ctx context.Context,
+	username string,
+	passwordHash string,
+) (database.CreateUserRow, error) {
+	user, err := r.queries.CreateUser(
+		ctx,
+		database.CreateUserParams{
+			Username:     username,
+			PasswordHash: passwordHash,
+		},
+	)
+
+	if err != nil {
+		var postgresError *pgconn.PgError
+
+		if errors.As(err, &postgresError) &&
+			postgresError.Code == "23505" {
+			return database.CreateUserRow{},
+				ErrUsernameUnavailable
+		}
+
+		return database.CreateUserRow{}, err
+	}
+
+	return user, nil
 }

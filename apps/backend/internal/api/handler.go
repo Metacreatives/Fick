@@ -14,15 +14,8 @@ func APIRoutes(
 ) http.Handler {
 	mux := http.NewServeMux()
 
-	mux.Handle(
-		"/works/",
-		http.StripPrefix("/works", WorkRoutes(workRepository, chapterRepository)),
-	)
-
-	mux.Handle(
-		"/users/",
-		http.StripPrefix("/works", UserRoutes(userRepository)),
-	)
+	UserRoutes(mux, userRepository)
+	WorkRoutes(mux, workRepository, chapterRepository)
 
 	return mux
 }
