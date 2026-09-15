@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"fick/backend/internal/api"
+	"fick/backend/internal/auth"
 	"fick/backend/internal/chapters"
 	"fick/backend/internal/config"
 	"fick/backend/internal/database"
 	dbgen "fick/backend/internal/database/generated"
 	"fick/backend/internal/frontend"
+	"fick/backend/internal/sessions"
 	"fick/backend/internal/users"
 	"fick/backend/internal/works"
 	"log"
@@ -68,6 +70,22 @@ func main() {
 	chapterRepository := chapters.NewRepository(queries)
 	userRepository := users.NewRepository(queries)
 
+	authService, err := auth.NewService(
+		pool,
+		queries,
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	authHandler := auth.NewHandler(
+		authService,
+		sessions.CookieConfig{
+			Secure: cfg.SecureCookies,
+		},
+	)
+
 	mux := http.NewServeMux()
 
 	mux.Handle(
@@ -76,6 +94,7 @@ func main() {
 			workRepository,
 			chapterRepository,
 			userRepository,
+			authHandler,
 		)),
 	)
 

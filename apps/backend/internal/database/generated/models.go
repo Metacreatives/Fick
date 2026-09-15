@@ -19,6 +19,14 @@ type Chapter struct {
 	ContentRaw    string
 }
 
+type Session struct {
+	TokenHash  []byte
+	UserID     int64
+	CreatedAt  pgtype.Timestamptz
+	LastSeenAt pgtype.Timestamptz
+	ExpiresAt  pgtype.Timestamptz
+}
+
 type User struct {
 	ID           int64
 	Username     string
