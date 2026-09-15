@@ -186,6 +186,75 @@ func (h *Handler) CreateSession(
 	)
 }
 
+func (h *Handler) DeleteSessions(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	var req struct {
+		All    bool   `json:"all"`
+		UserID string `json:"user_id"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+
+	if err != nil && !errors.Is(err, io.EOF) {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			"invalid_request",
+		)
+		return
+	}
+
+	if req.All {
+		if err := h.service.Logout(r.Context(), nil, &req.UserID); err != nil {
+			writeJSONError(
+				w,
+				http.StatusInternalServerError,
+				"logout_failed",
+			)
+			return
+		}
+
+		h.cookies.Clear(w)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	cookie, err := r.Cookie(h.cookies.Name())
+
+	if errors.Is(err, http.ErrNoCookie) {
+		h.cookies.Clear(w)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	if err != nil {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			"invalid_request",
+		)
+		return
+	}
+
+	if err := h.service.Logout(
+		r.Context(),
+		&cookie.Value,
+		nil,
+	); err != nil {
+		writeJSONError(
+			w,
+			http.StatusInternalServerError,
+			"logout_failed",
+		)
+		return
+	}
+
+	h.cookies.Clear(w)
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func decodeJSON(
 	w http.ResponseWriter,
 	r *http.Request,

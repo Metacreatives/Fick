@@ -14,6 +14,7 @@ func UserRoutes(
 	mux.HandleFunc("POST /users", authHandler.RegisterUser)
 	mux.HandleFunc("GET /users/{id}", users.GetUser(userRepository))
 	mux.HandleFunc("POST /users/sessions", authHandler.CreateSession)
+	mux.HandleFunc("DELETE /users/sessions", authHandler.DeleteSessions)
 
 	return mux
 }

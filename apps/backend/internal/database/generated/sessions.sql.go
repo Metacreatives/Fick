@@ -36,13 +36,46 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) er
 	return err
 }
 
-const deleteSession = `-- name: DeleteSession :exec
+const deleteSessions = `-- name: DeleteSessions :exec
 
 DELETE FROM sessions
-WHERE token_hash = $1
+WHERE token_hash = ANY($1::bytea[])
 `
 
-func (q *Queries) DeleteSession(ctx context.Context, tokenHash []byte) error {
-	_, err := q.db.Exec(ctx, deleteSession, tokenHash)
+func (q *Queries) DeleteSessions(ctx context.Context, dollar_1 [][]byte) error {
+	_, err := q.db.Exec(ctx, deleteSessions, dollar_1)
 	return err
+}
+
+const getSessionsByUserID = `-- name: GetSessionsByUserID :many
+
+SELECT token_hash, user_id, created_at, last_seen_at, expires_at
+FROM sessions
+WHERE user_id = $1
+`
+
+func (q *Queries) GetSessionsByUserID(ctx context.Context, userID int64) ([]Session, error) {
+	rows, err := q.db.Query(ctx, getSessionsByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Session
+	for rows.Next() {
+		var i Session
+		if err := rows.Scan(
+			&i.TokenHash,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.LastSeenAt,
+			&i.ExpiresAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

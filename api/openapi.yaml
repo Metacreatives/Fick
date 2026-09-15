@@ -155,6 +155,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteSessions
+
+      responses:
+        "204":
+          description: Sessions deleted
 
 components:
   schemas:

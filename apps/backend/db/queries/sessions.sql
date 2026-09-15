@@ -12,7 +12,13 @@ VALUES (
 );
 
 
--- name: DeleteSession :exec
+-- name: DeleteSessions :exec
 
 DELETE FROM sessions
-WHERE token_hash = $1;
+WHERE token_hash = ANY($1::bytea[]);
+
+-- name: GetSessionsByUserID :many
+
+SELECT *
+FROM sessions
+WHERE user_id = $1;

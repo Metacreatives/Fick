@@ -194,6 +194,37 @@ func (s *Service) Login(
 	return sessionToken.Raw, nil
 }
 
+func (s *Service) Logout(
+	ctx context.Context,
+	rawToken *string,
+	userId *string,
+) error {
+	var tokenHash = [][]byte{}
+
+	if rawToken == nil && userId == nil {
+		return errors.New("You need either rawToken or userId")
+	}
+
+	if rawToken != nil {
+		tokenHash = append(tokenHash, sessions.HashToken(*rawToken))
+	} else {
+		sessions, err := s.sessions.FindSessionsById(ctx, *userId)
+
+		if err != nil {
+			return err
+		}
+
+		for _, session := range sessions {
+			tokenHash = append(tokenHash, session.TokenHash)
+		}
+	}
+
+	return s.sessions.Delete(
+		ctx,
+		tokenHash,
+	)
+}
+
 func validRegistration(
 	username string,
 	password string,
